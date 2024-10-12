@@ -1,20 +1,12 @@
+# app.py
 #!/usr/bin/env python3
-
-# Standard library imports
 
 # Remote library imports
 from flask import request
-from flask_restful import Resource
-from flask.ext.bcrypt import Bcrypt
-
-# instantiate Bcrypt with app instance
-bcrypt = Bcrypt(app)
-
 
 # Local imports
-from config import app, db, api
-# Add your model imports
-
+from config import app, db, api, bcrypt  # bcrypt imported from config
+from models import User, Car, Feature, Comparison  # Import your models
 
 # Views go here!
 
@@ -22,7 +14,5 @@ from config import app, db, api
 def index():
     return '<h1>Project Server</h1>'
 
-
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-
