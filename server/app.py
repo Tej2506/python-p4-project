@@ -5,6 +5,11 @@
 # Remote library imports
 from flask import request
 from flask_restful import Resource
+from flask.ext.bcrypt import Bcrypt
+
+# instantiate Bcrypt with app instance
+bcrypt = Bcrypt(app)
+
 
 # Local imports
 from config import app, db, api
