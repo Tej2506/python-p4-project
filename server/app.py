@@ -52,9 +52,22 @@ def scrape_car_details(manufacturer, car_name):
 
 # Views go here!
 
-@app.route('/')
-def index():
-    return '<h1>Car Comppare API</h1>'
+class Index(Resource):
+
+    def get(self):
+
+        response_dict = {
+            "index": "Welcome to the Car Compare API",
+        }
+
+        response = make_response(
+            response_dict,
+            200,
+        )
+
+        return response
+
+api.add_resource(Index, '/')
 
 class CarsResource(Resource):
 
