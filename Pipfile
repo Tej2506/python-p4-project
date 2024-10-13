@@ -15,7 +15,8 @@ flask-cors = "*"
 faker = "*"
 beautifulsoup4 = "*"
 requests = "*"
-bcrypt = "*"
+flask-bcrypt = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_full_version = "3.8.13"
