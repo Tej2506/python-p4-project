@@ -11,6 +11,7 @@ from sqlalchemy import MetaData
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://car_admin:password@localhost/car_compare_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'your_secret_key'
 app.json.compact = False
 
 # Define metadata, instantiate db
@@ -25,5 +26,5 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS and Bcrypt
-CORS(app)
-bcrypt = Bcrypt(app)  # Bcrypt is correctly initialized here
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+bcrypt = Bcrypt(app) 

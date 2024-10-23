@@ -22,16 +22,16 @@ class SignupResource(Resource):
             db.session.commit()
 
             session['user_id']= new_user.id
-            return make_resposne({'message': 'Signup successful'}, 201)
+            return make_resposne(new_user.to_dict(), 200)
 
 class LoginResource(Resource):
     def post(self):
         data = request.get_json()
-        user = User.query.filter_by(username == data.get('username')).first()
+        user = User.query.filter_by(username = data.get('username')).first()
 
         if user and user.authenticate(data.get('password')):
             session['user_id'] = user.id
-            return make_response({'message': 'Login Successful'}, 200)
+            return make_response({'user_id': user.id}, 200)
 
 class LogoutResource(Resource):
     def post(self):

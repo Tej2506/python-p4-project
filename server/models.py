@@ -1,3 +1,4 @@
+#models.py
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from config import db, bcrypt
@@ -37,6 +38,7 @@ class Car(db.Model, SerializerMixin):
 
     features = db.relationship('Feature', secondary='car_features', back_populates='cars')
     comparisons = db.relationship('Comparison', back_populates='car', cascade='all, delete-orphan')
+    serialize_only = ('id', 'manufacturer', 'name', 'price', 'power', 'engine', 'torque', 'feature_names')
     feature_names = association_proxy('features', 'name')  
 
 # Feature model (many-to-many relationship)

@@ -1,19 +1,28 @@
-// components/App.js
+//App.js
 
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Signup from './Signup';
+import Login from './Login';
+import Logout from './Logout'; 
+import Home from './Home';
+import UserProfile from './UserProfile'
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route path = "/" element = {<Home/>}/>
-        <Route path = "/cars" element = {<Cars/>}/>
-        <Route path = "/signup" element = {<Signup/>}/>
-        <Route path = "/login" element = {<Login/>}/>
-      </Routes>
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/logout" component={Logout} />
+          <Route exact path = "/userprofile/:id" component={UserProfile}/>
+        </Switch>
+      </div>
+    </Router>
+  
+   
   );
 }
 
