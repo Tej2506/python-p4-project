@@ -20,6 +20,7 @@ function CompareCars({selectedCars}){
             <th>Power</th>
             <th>Engine</th>
             <th>Torque</th>
+            <th>Features</th>
           </tr>
         </thead>
         <tbody>
@@ -31,6 +32,13 @@ function CompareCars({selectedCars}){
               <td>{car.power || 'N/A'}</td>
               <td>{car.engine || 'N/A'}</td>
               <td>{car.torque || 'N/A'}</td>
+              <td>
+                <ul>
+                      {car.feature_names.map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                      ))}
+                </ul>
+              </td>
             </tr>
           ))}
         </tbody>
