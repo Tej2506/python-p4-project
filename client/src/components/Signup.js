@@ -1,15 +1,18 @@
 //Signup.js
 import React from 'react';
 import { useFormik } from 'formik';
+import {useState} from "react"
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
+  const [username, setUsername] = useState('')
   const formik = useFormik({
     initialValues: {
       username: '',
       password: ''
     },
     onSubmit: (values) => {
-      fetch('http://localhost:5555/signup', {
+      fetch('http://127.0.0.1:5000/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -17,9 +20,8 @@ const Signup = () => {
         body: JSON.stringify(values)
       })
         .then(res => res.json())
-        .then(data => {
-          console.log(data);
-        });
+        .then(data => setUsername(data.username))
+
     }
   });
 
@@ -43,6 +45,14 @@ const Signup = () => {
         />
         <button type="submit">Signup</button>
       </form>
+      <div>
+      {username && (
+        <div>
+          <p>Your account is now active, go ahead and login.</p>
+          <Link to="/login">Go to Login</Link>
+        </div>
+        )}
+      </div>
     </div>
   );
 };
