@@ -1,23 +1,33 @@
-//AddCar.js
 import React from 'react';
 import { useFormik } from 'formik';
 
-function AddCar({cars, setCars}){
+function AddCar({ cars, setCars, user_id, setNoCarsAdded }) {
   const formik = useFormik({
     initialValues: {
       manufacturer: '',
-      car_name: ''
+      car_name: '',
     },
     onSubmit: (values) => {
-      fetch('http://127.0.0.1:5000/cars', {
+      const data = { ...values, user_id };
+      fetch(`http://127.0.0.1:5000/cars`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values)
+        credentials: 'include',
+        body: JSON.stringify(data)
       })
         .then(res => res.json())
-        .then(newcar => { setCars([...cars, newcar])});
+        .then(newcar => {
+          if (newcar) {
+            setCars([...cars, newcar])
+            setNoCarsAdded(false) 
+          } 
+          else {
+            console.error('Failed to add car');
+          }
+        })
+        .catch(error => console.error('Error adding car:', error));
     }
   });
 
@@ -43,6 +53,6 @@ function AddCar({cars, setCars}){
       </form>
     </div>
   );
-};
+}
 
 export default AddCar;
