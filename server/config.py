@@ -6,12 +6,14 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt  # Import Bcrypt
 from sqlalchemy import MetaData
+from datetime import timedelta
+import os
 
 # Instantiate app, set attributes
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://car_admin:password@localhost/car_compare_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key'
+# app.config['SECRET_KEY'] = os.urandom(16)
 app.json.compact = False
 
 # Define metadata, instantiate db
@@ -26,5 +28,5 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS and Bcrypt
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
 bcrypt = Bcrypt(app) 
