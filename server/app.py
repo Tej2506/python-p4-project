@@ -58,15 +58,15 @@ class Index(Resource):
 
     def get(self):
 
-        # response_dict = {
-        #     "index": "Welcome to the Car Compare API",
-        # }
-        # response = make_response(
-        #     response_dict,
-        #     200,
-        # )
+        response_dict = {
+            "index": "Welcome to the Car Compare API",
+        }
+        response = make_response(
+            response_dict,
+            200,
+        )
 
-        # return response
+        return response
     
         
         # users = [user.to_dict() for user in User.query.all()]
@@ -83,8 +83,8 @@ class Index(Resource):
 
         # users = [user.to_dict() for user in User.query.all()]
         # return make_response(users, 200)
-        cars = [car.to_dict() for car in Car.query.all()]
-        return make_response(cars, 200)
+        # cars = [car.to_dict() for car in Car.query.all()]
+        # return make_response(cars, 200)
 
 
 
