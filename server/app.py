@@ -9,7 +9,7 @@ import requests
 import os
 
 # Local imports
-from config import app, db, api, bcrypt, CORS  # bcrypt imported from config
+from config import app, db, api, bcrypt  # bcrypt imported from config
 from models import User, Car, Feature, Comparison  # Import your models
 # from auth import SignupResource, LoginResource, LogoutResource, CheckLoginResource
 
