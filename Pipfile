@@ -17,6 +17,7 @@ beautifulsoup4 = "*"
 requests = "*"
 flask-bcrypt = "*"
 psycopg2-binary = "*"
+gunicorn = "*"
 
 [requires]
 python_full_version = "3.8.13"
