@@ -11,7 +11,7 @@ import os
 
 # Instantiate app, set attributes
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://car_admin:password@localhost/car_compare_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://car_compare_db_user:k17MVPFlbtvFmWxJX9u8bye8OMDd8ZSm@dpg-cscvd1lds78s73bfcql0-a.ohio-postgres.render.com/car_compare_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['SECRET_KEY'] = os.urandom(16)
 app.json.compact = False
