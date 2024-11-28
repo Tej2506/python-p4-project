@@ -1,8 +1,10 @@
+// UserProfile.js
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import AddCar from './AddCar';
 import CompareCars from './CompareCars';
+import { Link } from 'react-router-dom';
+
 
 function UserProfile() {
   const { user_id } = useParams();
@@ -13,7 +15,7 @@ function UserProfile() {
   const history = useHistory();
 
   function handleSelectCar(carId) {
-    setShowComparison(false)
+    setShowComparison(false);
     if (selectedCars.includes(carId)) {
       setSelectedCars(selectedCars.filter(id => id !== carId));
     } else {
@@ -22,7 +24,7 @@ function UserProfile() {
   }
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/my_comparisons/${user_id}`, {
+    fetch(`http://127.0.0.1:5000/my_comparisons`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -31,11 +33,9 @@ function UserProfile() {
     })
       .then(response => {
         if (response.status === 200) {
-          return response.json()
-        }
-        else if (response.status === 204) {
+          return response.json();
+        } else if (response.status === 204) {
           setNoCarsAdded(true);
-          return [];
         }
         throw new Error('Failed to fetch cars');
       })
@@ -48,7 +48,7 @@ function UserProfile() {
         }
       })
       .catch(error => console.error('Error fetching cars:', error));
-  }, [user_id]);
+  }, []);
 
   function handleLogout() {
     fetch('http://127.0.0.1:5000/logout', {
@@ -68,61 +68,72 @@ function UserProfile() {
   function handleCompareCars() {
     setShowComparison(true);
   }
-  function handleDelete(car_ids){
-      fetch(`http://127.0.0.1:5000/delete_comparisons/${user_id}`,{
-        method: 'POST',
-        headers: {
+
+  function handleDelete(car_ids) {
+    fetch(`http://127.0.0.1:5000/delete_comparisons`, {
+      method: 'POST',
+      headers: {
         'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ 'car_ids': car_ids}),
-      })
+      },
+      credentials: 'include',
+      body: JSON.stringify({ 'car_ids': car_ids }),
+    })
       .then((response) => {
         if (response.ok) {
-          setCars(cars.filter(car=> !car_ids.includes(car['id'])))
-        } 
-        else {
+          setCars(cars.filter(car => !car_ids.includes(car['id'])));
+        } else {
           throw new Error('Failed to delete the car.');
         }
-    })
-}
-
+      });
+  }
 
   return (
-    <div>
-      <h2>Compare Cars</h2>
-      <h3>Select Cars to compare</h3>
-      <button onClick={handleLogout}>Logout</button>
-      <div>
-        {noCarsAdded ? (
-          <p>No Cars added</p>
-        ) : (
-          <ul>
-            {cars.map(car => (
-              <li key={car.id}>
-                <input
-                  type="checkbox"
-                  onChange={() => handleSelectCar(car.id)}
-                  checked={selectedCars.includes(car.id)}
-                />
-                {car.manufacturer} {car.name} 
-              </li>
-            ))}
-          </ul>
+    <div className="user-profile-page">
+      <div className="user-profile-container">
+        <h2>Compare Cars</h2>
+        <h3>Select Cars to compare</h3>
+        <Link to ={`/userprofile/${user_id}/dashboard`} className="hero-button">Dashboard</Link>
+        <button className='user-profile-button logout-button' onClick={handleLogout}>
+          Logout
+        </button>
+        <div>
+          {noCarsAdded ? (
+            <p>No Cars added</p>
+          ) : (
+            <ul className="car-list">
+              {cars.map(car => (
+                <li key={car.id}>
+                  <input
+                    type="checkbox"
+                    onChange={() => handleSelectCar(car.id)}
+                    checked={selectedCars.includes(car.id)}
+                  />
+                  {car.manufacturer} {car.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="user-profile-buttons">
+          <button
+            className="user-profile-button compare-button"
+            onClick={handleCompareCars}
+            disabled={selectedCars.length === 0}
+          >
+            Compare Cars
+          </button>
+          <button
+            className="user-profile-button delete-button"
+            onClick={() => handleDelete(selectedCars)}
+            disabled={selectedCars.length === 0}
+          >
+            Delete Selected Cars Permanently
+          </button>
+        </div>
+        {showComparsion && (
+          <CompareCars selectedCars={cars.filter(car => selectedCars.includes(car.id))} cars={cars} />
         )}
-      </div>
-      <button onClick={handleCompareCars} disabled={selectedCars.length === 0}>
-        Compare Cars
-      </button>
-      <button onClick={()=>handleDelete(selectedCars)} disabled={selectedCars.length === 0}>Delete Selected Cars Permanently</button>
-      {showComparsion && (
-        <CompareCars
-          selectedCars={cars.filter(car => selectedCars.includes(car.id))}
-          cars={cars}
-        />
-      )}
-      <div>
-        <AddCar cars={cars} setCars={setCars} user_id={user_id} setNoCarsAdded={setNoCarsAdded}/>
+        <AddCar cars={cars} setCars={setCars} setNoCarsAdded={setNoCarsAdded} />
       </div>
     </div>
   );

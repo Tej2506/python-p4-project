@@ -19,7 +19,7 @@ def scrape_car_details(manufacturer, car_name):
     manufacturer_search_query = manufacturer.replace(" ", "-").lower()
     car_name_search_query = car_name.replace(" ", "-").lower()
 
-    url = f"https://www.cardekho.com/{manufacturer_search_query}/{car_name_search_query}"
+    url = f"https://www.cardekho.com/{manufacturer_search_query}-cars/{car_name_search_query}"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
     
@@ -58,15 +58,15 @@ class Index(Resource):
 
     def get(self):
 
-        # response_dict = {
-        #     "index": "Welcome to the Car Compare API",
-        # }
-        # response = make_response(
-        #     response_dict,
-        #     200,
-        # )
+        response_dict = {
+            "index": "Welcome to the Car Compare API",
+        }
+        response = make_response(
+            response_dict,
+            200,
+        )
 
-        # return response
+        return response
     
         
         # users = [user.to_dict() for user in User.query.all()]
@@ -83,8 +83,8 @@ class Index(Resource):
 
         # users = [user.to_dict() for user in User.query.all()]
         # return make_response(users, 200)
-        cars = [car.to_dict() for car in Car.query.all()]
-        return make_response(cars, 200)
+        # cars = [car.to_dict() for car in Car.query.all()]
+        # return make_response(cars, 200)
 
 
 
@@ -98,105 +98,91 @@ class CarsResource(Resource):
 
     def post(self):
         data = request.get_json()
-        user_id = data.get('user_id')
-        car = Car.query.filter_by(name = data['car_name']).first()
-        if car:
-            cars_added = [comparison.car_id for comparison in Comparison.query.filter_by(user_id=user_id).all()]
-            if (car.id not in cars_added) :
-                comparison = Comparison(user_id=user_id, car_id=car.id)
-                db.session.add(comparison)
-                db.session.commit()
-            return make_response(car.to_dict(),201)
-        
-        car_details = scrape_car_details(data.get('manufacturer'), data.get('car_name'))
-
-        if car_details:
-            car = Car(
-                manufacturer=car_details['manufacturer'],
-                name=car_details['name'],
-                price=car_details['price'],
-                power=car_details.get('Power'),
-                engine=car_details.get('Engine'),
-                torque=car_details.get('Torque')
-            )
-            db.session.add(car)
-            db.session.commit()
-
-            # Associate features with car
-            features = car_details.get('features_list', [])
-            for feature_name in features:
-                feature = Feature.query.filter_by(name=feature_name.lower()).first()
-                if not feature:
-                    feature = Feature(name=feature_name.lower())
-                    db.session.add(feature)
+        user_id = session.get('user_id')
+        if user_id:
+            car = Car.query.filter_by(name = data['car_name']).first()
+            if car:
+                cars_added = [comparison.car_id for comparison in Comparison.query.filter_by(user_id=user_id).all()]
+                if (car.id not in cars_added) :
+                    comparison = Comparison(user_id=user_id, car_id=car.id)
+                    db.session.add(comparison)
                     db.session.commit()
+                return make_response(car.to_dict(),201)
+            
+            car_details = scrape_car_details(data.get('manufacturer'), data.get('car_name'))
 
-                # Append the feature to the car
-                if feature not in car.features:
-                    car.features.append(feature)
-
-            db.session.commit()
-            print(user_id,"this is user_id")
-            cars_added = [comparison.car_id for comparison in Comparison.query.filter_by(user_id=user_id).all()]
-            if (car.id not in cars_added) :
-                comparison = Comparison(user_id=user_id, car_id=car.id)
-                db.session.add(comparison)
+            if car_details:
+                car = Car(
+                    manufacturer=car_details['manufacturer'],
+                    name=car_details['name'],
+                    price=car_details['price'],
+                    power=car_details.get('Power'),
+                    engine=car_details.get('Engine'),
+                    torque=car_details.get('Torque')
+                )
+                db.session.add(car)
                 db.session.commit()
-                response = make_response(car.to_dict(), 200)
-                return response
-            else:
-                return make_response({'message':'car already added under user'},203)
- 
 
-        else:
-            return make_response({"error": "Car details not found"}, 404)
+                # Associate features with car
+                features = car_details.get('features_list', [])
+                for feature_name in features:
+                    feature = Feature.query.filter_by(name=feature_name.lower()).first()
+                    if not feature:
+                        feature = Feature(name=feature_name.lower())
+                        db.session.add(feature)
+                        db.session.commit()
+
+                    # Append the feature to the car
+                    if feature not in car.features:
+                        car.features.append(feature)
+
+                db.session.commit()
+                print(user_id,"this is user_id")
+                cars_added = [comparison.car_id for comparison in Comparison.query.filter_by(user_id=user_id).all()]
+                if (car.id not in cars_added) :
+                    comparison = Comparison(user_id=user_id, car_id=car.id)
+                    db.session.add(comparison)
+                    db.session.commit()
+                    response = make_response(car.to_dict(), 200)
+                    return response
+                else:
+                    return make_response({'message':'car already added under user'},203)
+    
+            else:
+                return make_response({"message": "Car details not found"}, 404)
+        else: 
+            return make_respone({"error":"User not logged in"},404)
 
 api.add_resource(CarsResource, '/cars')
 
-class CarByID(Resource):
-    def get(self, id):
-        car = Car.query.filter_by(id=id).first()
-        if car:
-            return make_response(jsonify(car.to_dict()), 200)
-        else:
-            return make_response({"error": "Car not found"}, 404)
-
-    
-    def delete(self, id):
-        car = Car.query.filter_by(id=id).first()
-
-        if car:
-            db.session.delete(car)
-            db.session.commit()
-            return make_response({"message": "Car successfully deleted"}, 200)
-        else:
-            return make_response({"error": "Car not found"}, 404)
-
-api.add_resource(CarByID, '/cars/<int:id>')
-
 class DeleteComparisonResource(Resource):
-    def post(self,user_id):
+    def post(self):
         data = request.get_json()
+        user_id = session.get('user_id')
+        if user_id:
+            car_ids_to_delete = data['car_ids']
+            if not car_ids_to_delete:
+                return make_response({"message": "No cars provided for deletion"}, 400)
 
-        car_ids_to_delete = data['car_ids']
-        if not car_ids_to_delete:
-            return make_response({"message": "No cars provided for deletion"}, 400)
-
-        user_cars = Comparison.query.filter_by(user_id = user_id).all()
-        if user_cars:
-            for user_car in user_cars:
-                if(user_car.car_id in car_ids_to_delete):
-                    db.session.delete(user_car)
-            db.session.commit()
-            return make_response({"message": "cars deleted successfully"}, 200)
+            user_cars = Comparison.query.filter_by(user_id = user_id).all()
+            if user_cars:
+                for user_car in user_cars:
+                    if(user_car.car_id in car_ids_to_delete):
+                        db.session.delete(user_car)
+                db.session.commit()
+                return make_response({"message": "cars deleted successfully"}, 200)
+            else:
+                return make_response({"message":"Could not delete cars"}, 404)
         else:
-            return make_response({"message":"Could not delete cars"}, 404)
+            return make_respone({"message":"User not logged in"},404)
+        
 
-api.add_resource(DeleteComparisonResource, '/delete_comparisons/<int:user_id>')
+api.add_resource(DeleteComparisonResource, '/delete_comparisons')
 
 class MyComparisonsResource(Resource):
-    def get(self, user_id):
-        print(f"Session data during /my_comparisons request: {session}")
+    def get(self):
+        user_id = session.get('user_id')
+        print("Session id:", user_id)
         if not user_id:
             return make_response({"error": "User not logged in"}, 401)
 
@@ -209,14 +195,60 @@ class MyComparisonsResource(Resource):
             for comparison in comparisons:
                 car = Car.query.filter_by(id=comparison.car_id).first()
                 if car:
-                    comparison_data.append(car.to_dict())
+                    response = comparison_data.append(car.to_dict())
 
             return make_response(jsonify(comparison_data), 200)
         else:
             return make_response({'message': 'No cars added'}, 204)
 
-api.add_resource(MyComparisonsResource, '/my_comparisons/<int:user_id>')
+api.add_resource(MyComparisonsResource, '/my_comparisons')
 
+class Dashboard(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return make_response({"error": "User not logged in"}, 401)
+        
+        user = User.query.filter_by(id = user_id).first()
+        return make_response({'username': user.username}, 200)
+    
+    def patch(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return make_response({"error": "User not logged in"}, 401)
+
+        data = request.get_json()
+        user = User.query.filter_by(id = user_id).first()
+        if user:
+            if 'username' in data:
+                setattr(user, 'username', data.get('username'))
+                db.session.commit()
+                return make_response({'message':'credential changed'},200)
+            if 'new_password' and 'current_password' in data:
+                    if not user.authenticate(data.get('current_password')):
+                        return make_response({"message": "Incorrect current password"},401)
+                    else:
+                        user.password = data.get('new_password')
+                        db.session.commit()
+                        return make_response({'message':'credential changed'},200)
+            else:
+                return make_response({'message':"fill both password fields"},401)
+        else:
+            return make_response({"error": "Unauthorized action"}, 403)
+    
+    def delete(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return make_response({"error": "User not logged in"}, 401)
+        
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            return make_response({"error": "User not found"}, 404)
+        db.session.delete(user)
+        db.session.commit()
+        return make_response({'message': 'User account deleted'}, 200)
+        
+        
 
 class SignupResource(Resource):
     def post(self):
@@ -233,8 +265,6 @@ class SignupResource(Resource):
            
             db.session.add(new_user)
             db.session.commit()
-
-            session['user_id']= new_user.id
             return make_response(new_user.to_dict(), 200)
 
 class LoginResource(Resource):
@@ -245,8 +275,10 @@ class LoginResource(Resource):
         if user:
             if user.authenticate(data['password']):
                 session['user_id'] = user.id
+                print(f"Session data during /my_comparisons request: {session}")
                 return make_response({'user_id': user.id}, 200)
             else:
+                print(session)
                 return make_response({'message':'Incorrect password, try again'},201)
         else:
             return make_response({'message':'User does not exist'},202)
@@ -257,52 +289,14 @@ class LogoutResource(Resource):
         session.pop('user_id', None)
         return make_response({'message': 'Logged out successfully'},200)
 
-class CheckLoginResource(Resource):
-    def get(self):
-        if is_logged_in():
-            return make_response({'message': 'User is logged in'},200)
-
-        else:
-            return make_response({'message': 'User is not logged in'}, 401)
 
 # Views go here!
 api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(LogoutResource, '/logout')
-api.add_resource(CheckLoginResource, '/checklogin')
+api.add_resource(Dashboard,'/user/dashboard')
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
 
-# def patch(self, id):
-#         car = Car.query.filter_by(id=id).first()
-
-#         if car:
-#             data = request.get_json()
-
-#             # Update car attributes
-#             car.name = data.get('name', car.name)
-#             car.manufacturer = data.get('manufacturer', car.manufacturer)
-#             car.price = data.get('price', car.price)
-#             car.power = data.get('power', car.power)
-#             car.engine = data.get('engine', car.engine)
-#             car.torque = data.get('torque', car.torque)
-
-#             # Update features
-#             features_list = data.get('features_list', [])
-#             car.features.clear()  # Clear existing features
-#             for feature_name in features_list:
-#                 feature = Feature.query.filter_by(name=feature_name.lower()).first()
-#                 if not feature:
-#                     feature = Feature(name=feature_name.lower())
-#                     db.session.add(feature)
-#                     db.session.commit()
-
-#                 if feature not in car.features:
-#                     car.features.append(feature)
-
-#             db.session.commit()
-
-#             return make_response(car.to_dict(), 200)
-#         else:
-#             return make_response({"error": "Car not found"}, 404)

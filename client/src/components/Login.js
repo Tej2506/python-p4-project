@@ -1,4 +1,4 @@
-// Login.js
+// // Login.js
 import React from 'react';
 import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
@@ -19,6 +19,7 @@ const Login = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accepts': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(values),
@@ -48,27 +49,35 @@ const Login = () => {
     },
   });
 
+  function clearMeassage(){
+    setMessage('')
+  }
+
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={formik.handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          onChange={formik.handleChange}
-          value={formik.values.username}
-          placeholder="Username"
-        />
-        <input
-          type="password"
-          name="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="Password"
-        />
-        <button type="submit">Login</button>
-      </form>
-      {loginFailed && <p>{message}</p>}
+    <div className="login-page" onMouseMove={clearMeassage}>
+      <div className="login-container">
+        <h2>Login</h2>
+        <form onSubmit={formik.handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            onChange={formik.handleChange}
+            value={formik.values.username}
+            placeholder="Username"
+            className="input-field"
+          />
+          <input
+            type="password"
+            name="password"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            placeholder="Password"
+            className="input-field"
+          />
+          <button type="submit" className="login-button">Login</button>
+        </form>
+        {loginFailed && <p className="error-message">{message}</p>}
+      </div>
     </div>
   );
 };

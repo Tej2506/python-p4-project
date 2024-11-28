@@ -26,7 +26,8 @@ const Signup = () => {
   });
 
   return (
-    <div>
+    <div className='signup-page'>
+      <div className='signup-page-container'>
       <h2>Signup</h2>
       <form onSubmit={formik.handleSubmit}>
         <input
@@ -52,6 +53,7 @@ const Signup = () => {
           <Link to="/login">Go to Login</Link>
         </div>
         )}
+      </div>
       </div>
     </div>
   );

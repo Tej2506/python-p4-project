@@ -1,38 +1,56 @@
-import React from 'react';
+//AddCar.js
+
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 
-function AddCar({ cars, setCars, user_id, setNoCarsAdded }) {
+function AddCar({ cars, setCars, setNoCarsAdded }) {
+  const [message, setMessage] = useState('');
+  
   const formik = useFormik({
     initialValues: {
       manufacturer: '',
       car_name: '',
     },
     onSubmit: (values) => {
-      const data = { ...values, user_id };
       fetch(`http://127.0.0.1:5000/cars`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(data)
+        body: JSON.stringify(values)
       })
-        .then(res => res.json())
-        .then(newcar => {
-          if (newcar) {
-            setCars([...cars, newcar])
-            setNoCarsAdded(false) 
-          } 
-          else {
-            console.error('Failed to add car');
+      .then((res) => {
+        if (res.ok) {
+          if ((res.status === 200) ||(res.status === 201) ) {
+            return res.json().then((newcar) => {
+              setCars([...cars, newcar]);
+              setNoCarsAdded(false);
+              setMessage("Car Added!!") 
+
+            });
+          } else {
+            return res.json().then((data) => {
+              setNoCarsAdded(false); 
+              setMessage(data['message']);
+            });
           }
-        })
-        .catch(error => console.error('Error adding car:', error));
+        } 
+        else {
+          return res.json().then((data) => {
+            setMessage(data['message']);
+          });
+        }
+      });
     }
   });
 
+  function clearMeassage(){
+    setMessage('')
+  }
+
   return (
-    <div>
+    <div className='container' onMouseMove={clearMeassage}>
       <h2>Add new cars</h2>
       <form onSubmit={formik.handleSubmit}>
         <input
@@ -49,8 +67,9 @@ function AddCar({ cars, setCars, user_id, setNoCarsAdded }) {
           value={formik.values.car_name}
           placeholder="Car Name"
         />
-        <button type="submit">Add Car</button>
+        <button type="submit" disabled={!formik.values.manufacturer || !formik.values.car_name}>Add Car</button>
       </form>
+      <p>{message}</p>
     </div>
   );
 }

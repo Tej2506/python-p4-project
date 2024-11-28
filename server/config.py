@@ -13,6 +13,9 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://car_admin:password@localhost/car_compare_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True  # Required when SameSite=None
+
 # app.config['SECRET_KEY'] = os.urandom(16)
 app.json.compact = False
 
@@ -28,5 +31,5 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS and Bcrypt
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 bcrypt = Bcrypt(app) 

@@ -1,7 +1,417 @@
-:root {
-  --bg: #282c34;
-  --header: #fff;
-  --link: #61dafb;
-  --text: hsla(0, 0%, 100%, 0.88);
+/* Styling for Home component */
+body {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  padding: 0; 
+  background-color: #f5f5f5;
 }
 
+.home {
+  text-align: center;
+}
+
+.hero {
+  background-image: url('https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/innovation/drive-technologies/electromobility/_jcr_content/main/tsdefault_copy_copy_.coreimg.82.1920.jpeg/1691744116941/2560x896-group-elektromobilitaet.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #fff;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.6); /* Adds dark overlay for text readability */
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin: 20px 0;
+  color: #ddd;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.hero-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  color: #fff;
+  background-color: rgb(17, 117, 231);
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #0056b3;
+}
+
+.features {
+  padding: 60px 20px;
+  background-color: #fff;
+}
+
+.features h2 {
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+.feature-list {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  width: 280px;
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.feature-item img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.feature-item h3 {
+  font-size: 20px;
+  margin: 10px 0;
+  color: #333;
+}
+
+.feature-item p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* index.css */
+
+.login-page {
+  background-image: url('https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/innovation/drive-technologies/electromobility/_jcr_content/main/tsdefault_copy_copy_.coreimg.82.1920.jpeg/1691744116941/2560x896-group-elektromobilitaet.jpeg'); /* Replace with actual path */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-field {
+  width: 90%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #06f355;
+  transform: scale(1.05);
+}
+
+.error-message {
+  color: red;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* user profile */
+
+.user-profile-page {
+  background-image: url('https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/innovation/drive-technologies/electromobility/_jcr_content/main/tsdefault_copy_copy_.coreimg.82.1920.jpeg/1691744116941/2560x896-group-elektromobilitaet.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+}
+
+.user-profile-container {
+  background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent to let background show through */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+.user-profile-container h2,
+.user-profile-container h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.car-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 1rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.car-list li {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.car-list input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.user-profile-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+
+.user-profile-button {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.logout-button {
+  background-color: #f44336;
+}
+
+.compare-button {
+  background-color: #4CAF50;
+}
+
+.delete-button {
+  background-color: #ff5722;
+}
+
+.user-profile-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.user-profile-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.compare-cars-container th {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
+.compare-cars-container tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.compare-cars-container tr:hover {
+  background-color: #ddd;
+}
+
+.compare-cars-container td ul {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: disc;
+}
+
+.compare-cars-container td ul li {
+  font-size: 14px;
+  color: #555;
+}
+
+.compare-cars-container p {
+  color: #333;
+  font-size: 16px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/*signup*/
+
+.signup-page {
+  background-image: url('https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/innovation/drive-technologies/electromobility/_jcr_content/main/tsdefault_copy_copy_.coreimg.82.1920.jpeg/1691744116941/2560x896-group-elektromobilitaet.jpeg'); /* Replace with actual path */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+.signup-page-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  text-align: center;
+}
+
+.signup-page h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.signup-page form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-page input {
+  width: 90%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.signup-page button {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.signup-page button:hover {
+  background-color: #06f355;
+  transform: scale(1.05);
+}
+.dashboard-page{
+  background-image: url('https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/innovation/drive-technologies/electromobility/_jcr_content/main/tsdefault_copy_copy_.coreimg.82.1920.jpeg/1691744116941/2560x896-group-elektromobilitaet.jpeg'); /* Replace with actual path */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.dashboard-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  text-align: center;
+}
+
+.dashboard-section {
+  margin-bottom: 20px;
+}
+
+.dashboard-section h2 {
+  margin-bottom: 10px;
+}
+
+.dashboard-section p {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+.dashboard-section input {
+  margin: 5px 0;
+  padding: 10px;
+  width: 100%;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.delete-button {
+  background: #dc3545;
+}
+
+.delete-button:hover {
+  background: #a71d2a;
+}
+
+.message {
+  color: #007bff;
+  font-size: 1em;
+  margin-top: 20px;
+  text-align: center;
+}

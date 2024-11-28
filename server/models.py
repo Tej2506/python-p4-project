@@ -35,11 +35,15 @@ class Car(db.Model, SerializerMixin):
     power = db.Column(db.String)
     engine = db.Column(db.String)
     torque = db.Column(db.String)
+    body_type_id = db.Column(db.Integer, db.ForeignKey('body_types.id'))
+
 
     features = db.relationship('Feature', secondary='car_features', back_populates='cars')
     comparisons = db.relationship('Comparison', back_populates='car', cascade='all, delete-orphan')
     serialize_only = ('id', 'manufacturer', 'name', 'price', 'power', 'engine', 'torque', 'feature_names')
     feature_names = association_proxy('features', 'name')  
+    body_types = db.relationship("BodyType",back_populates="cars")
+    
 
 # Feature model (many-to-many relationship)
 class Feature(db.Model, SerializerMixin):
@@ -64,3 +68,10 @@ class Comparison(db.Model, SerializerMixin):
 
     user = db.relationship('User', back_populates='comparisons')
     car = db.relationship('Car', back_populates='comparisons')
+
+class BodyType(db.Model, SerializerMixin):
+    __tablename__ = 'body_types'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    cars = db.relationship("Car", back_populates = "body_types")
+

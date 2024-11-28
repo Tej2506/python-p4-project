@@ -9,7 +9,7 @@ function CompareCars({selectedCars}){
     }
 
     return (
-        <div>
+        <div className='compare-cars-container'>
       <h3>Car Comparison</h3>
       <table border="1" cellPadding="10" cellSpacing="0">
         <thead>
